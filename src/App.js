@@ -92,7 +92,7 @@ function Box({ children }) {
   );
 }
 
-function MovieList({ movies, content }) {
+function MovieList({ movies }) {
   return (
     <ul className='list'>
       {movies?.map((movie) => (
