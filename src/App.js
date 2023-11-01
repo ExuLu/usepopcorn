@@ -5,22 +5,33 @@ const average = (arr) =>
 
 const KEY = 'eca4a156';
 
-function Button({ onClick, isOpen }) {
-  return (
-    <button className='btn-toggle' onClick={() => onClick((open) => !open)}>
-      {isOpen ? '–' : '+'}
-    </button>
-  );
-}
-
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const query = 'interstellar';
 
   useEffect(function () {
-    fetch(`https://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=interstellar`)
-      .then((res) => res.json())
-      .then((data) => setMovies(data.Search));
+    async function fetchMovies() {
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `https://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`
+        );
+
+        if (!res.ok)
+          throw new Error('Something went wrong wigh fetching movies');
+
+        const data = await res.json();
+        setMovies(data.Search);
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err.message);
+        setError(err.message);
+      }
+    }
+    fetchMovies();
   }, []);
 
   return (
@@ -31,9 +42,7 @@ export default function App() {
       </NavBar>
 
       <Main movies={movies}>
-        <Box>
-          <MovieList movies={movies} />
-        </Box>
+        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
 
         <Box>
           <WatchedSummary watched={watched} />
@@ -42,6 +51,12 @@ export default function App() {
       </Main>
     </>
   );
+}
+
+function ErrorMessage() {}
+
+function Loader() {
+  return <p className='loader'>Loading...</p>;
 }
 
 function NavBar({ children }) {
@@ -81,6 +96,14 @@ function NumResults({ movies }) {
     <p className='num-results'>
       Found <strong>{movies.length}</strong> results
     </p>
+  );
+}
+
+function Button({ onClick, isOpen }) {
+  return (
+    <button className='btn-toggle' onClick={() => onClick((open) => !open)}>
+      {isOpen ? '–' : '+'}
+    </button>
   );
 }
 
