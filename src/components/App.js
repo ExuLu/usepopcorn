@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import ErrorMessage from './ErrorMessage.js';
-import Loader from './Loader.js';
-import NavBar from './NavBar.js';
-import Search from './Search.js';
-import NumResults from './NumResults.js';
-import Main from './Main.js';
-import Box from './Box.js';
-import MovieList from './MovieList.js';
-import MovieDetails from './MovieDetails.js';
-import WatchedSummary from './WatchedSummary.js';
-import WatchedMoviesList from './WatchedMoviesList.js';
-import { KEY } from './constants.js';
+import ErrorMessage from './Main/ErrorMessage.js';
+import Loader from './Main/Loader.js';
+import NavBar from './NavBar/NavBar.js';
+import Search from './NavBar/Search.js';
+import NumResults from './NavBar/NumResults.js';
+import Main from './Main/Main.js';
+import Box from './Main/Box.js';
+import MovieList from './Main/BoxAllMovies/MovieList.js';
+import MovieDetails from './Main/MovieDetails.js';
+import WatchedSummary from './Main/BoxWatched/WatchedSummary.js';
+import WatchedMoviesList from './Main/BoxWatched/WatchedMoviesList.js';
+import { KEY } from '../constants.js';
 
 export default function App() {
   const [query, setQuery] = useState('');

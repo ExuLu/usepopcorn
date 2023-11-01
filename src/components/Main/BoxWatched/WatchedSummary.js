@@ -1,4 +1,4 @@
-import { average } from './constants';
+import { average } from '../../../constants';
 
 export default function WatchedSummary({ watched }) {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
