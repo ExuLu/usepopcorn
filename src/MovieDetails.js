@@ -7,9 +7,17 @@ export default function MovieDetails({
   selectedId,
   onCloseMovie,
   onAddWatched,
+  watched,
 }) {
   const [seletedMovie, setSelectedMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState('');
+
+  const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
+  console.log(isWatched);
+  const watchedUserRating = watched.find(
+    (movie) => movie.imdbID === selectedId
+  )?.userRating;
 
   function handleAdd() {
     const newWatchedMovie = {
@@ -18,8 +26,10 @@ export default function MovieDetails({
       poster,
       title,
       runtime: Number(runtime.split(' ').at(0)),
-      userRating: 8,
+      userRating,
     };
+
+    onCloseMovie();
 
     onAddWatched(newWatchedMovie);
   }
@@ -37,7 +47,6 @@ export default function MovieDetails({
 
           const data = await res.json();
           setSelectedMovie(data);
-          console.log(data);
         } catch (err) {
           console.error(err.message);
         } finally {
@@ -87,12 +96,25 @@ export default function MovieDetails({
 
           <section>
             <div className='rating'>
-              <StarRating maxRating={10} size={24} />
-
-              <button className='btn-add' onClick={handleAdd}>
-                Add to list
-              </button>
+              {!isWatched ? (
+                <>
+                  <StarRating
+                    maxRating={10}
+                    size={24}
+                    onSetRating={setUserRating}
+                    defaultRating={watchedUserRating}
+                  />
+                  {userRating > 0 && (
+                    <button className='btn-add' onClick={handleAdd}>
+                      + Add to list
+                    </button>
+                  )}{' '}
+                </>
+              ) : (
+                <p>You rated this movie {watchedUserRating} 🌟</p>
+              )}
             </div>
+
             <p>
               <em>{plot}</em>
             </p>
