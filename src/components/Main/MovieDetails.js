@@ -34,6 +34,18 @@ export default function MovieDetails({
     onAddWatched(newWatchedMovie);
   }
 
+  const {
+    Title: title,
+    Poster: poster,
+    Runtime: runtime,
+    imdbRating,
+    Plot: plot,
+    Released: released,
+    Actors: actors,
+    Director: director,
+    Genre: genre,
+  } = seletedMovie;
+
   useEffect(
     function () {
       async function fetchMovieDetails() {
@@ -58,17 +70,13 @@ export default function MovieDetails({
     [selectedId]
   );
 
-  const {
-    Title: title,
-    Poster: poster,
-    Runtime: runtime,
-    imdbRating,
-    Plot: plot,
-    Released: released,
-    Actors: actors,
-    Director: director,
-    Genre: genre,
-  } = seletedMovie;
+  useEffect(
+    function () {
+      if (!title) return;
+      document.title = `MOVIE: ${title}`;
+    },
+    [title]
+  );
 
   return (
     <div className='details'>
